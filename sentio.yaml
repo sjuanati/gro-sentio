@@ -1,1 +1,5 @@
 project: gro
+contracts:
+  - chain: "1"
+    address: "0xd4139E090e43Ff77172d9dD8BA449d2A9683790d"
+    name: GRouter
