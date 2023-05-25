@@ -15,11 +15,12 @@ import {
     LogDepositEvent,
     LogWithdrawalEvent,
 } from '../types/eth/grouter.js';
+import { Token } from '../types.js';
 
 // const gvtAcc = Counter.register('gvt_acc');
 // const pwrdAcc = Counter.register('pwrd_acc');
 
-export const gRouterDepositlHandler = async (
+export const LogDepositEventHandler = async (
     event: LogDepositEvent,
     ctx: GRouterContext
 ): Promise<void> => {
@@ -49,7 +50,7 @@ export const gRouterDepositlHandler = async (
     // }
 }
 
-export const gRouterWithdrawalHandler = async (
+export const LogWithdrawalEventHandler = async (
     event: LogWithdrawalEvent,
     ctx: GRouterContext
 ): Promise<void> => {

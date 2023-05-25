@@ -8,13 +8,16 @@
     "gen": "sentio gen",
     "build": "sentio build",
     "upload": "sentio upload",
-    "postinstall": "sentio gen"
+    "postinstall": "sentio gen",
+    "dev": "NODE_ENV=dev sentio upload",
+    "prod": "NODE_ENV=prod sentio upload"
   },
   "dependencies": {
-    "@sentio/sdk": "^2.15.4"
+    "@sentio/sdk": "^2.17.0"
   },
   "devDependencies": {
-    "@sentio/cli": "^2.8.0",
+    "@sentio/cli": "^2.9.0",
+    "dotenv": "^16.0.3",
     "typescript": "^5.0.3"
   }
 }
