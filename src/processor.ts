@@ -3,10 +3,19 @@ import { CONTRACT, ZERO_ADDR } from './constants.js'
 import { ERC20Processor } from '@sentio/sdk/eth/builtin';
 import { GRouterProcessor } from './types/eth/grouter.js';
 import { GTrancheProcessor } from './types/eth/gtranche.js';
-// import {
-// 	gRouterDepositlHandler,
-// 	gRouterWithdrawalHandler,
-// } from './processors/grouter.js';
+import { GROHodlerV2, GROHodlerV2Processor } from './types/eth/grohodlerv2.js';
+import { GROVestingV2Processor } from './types/eth/grovestingv2.js';
+import {
+	LogVestEventlHandler,
+	LogExitEventlHandler,
+	LogExtendEventlHandler,
+	blockHandler as groVestingBlockHandler,
+} from './processors/grovesting.js';
+import {
+	LogBonusAddedEventHandler,
+	LogBonusClaimedEventHandler,
+	blockHandler as groHodlerBlockHandler,
+} from './processors/grohodler.js'
 import {
 	// blockHandler,
 	LogNewDepositEventlHandler,
@@ -14,6 +23,10 @@ import {
 	LogNewTrancheBalanceHandler,
 } from './processors/gtranche.js';
 import { BigDecimal, EthChainId, Gauge, MetricOptions, LogLevel, Counter } from "@sentio/sdk";
+// import {
+// 	gRouterDepositlHandler,
+// 	gRouterWithdrawalHandler,
+// } from './processors/grouter.js';
 config();
 
 // const gvtAcc = Counter.register('gvt_acc');
@@ -23,33 +36,27 @@ config();
 // 	.onEventLogDeposit(gRouterDepositlHandler)
 // 	.onEventLogWithdrawal(gRouterWithdrawalHandler);
 
+/*
 GTrancheProcessor.bind({ address: CONTRACT.GTRANCHE, network: EthChainId.ETHEREUM })
-	// .onEventLogNewDeposit(LogNewDepositEventlHandler)
-	// .onEventLogNewWithdrawal(LogNewWithdrawalEventHandler)
 	.onEventLogNewTrancheBalance(LogNewTrancheBalanceHandler)
-	// .onBlockInterval(blockHandler);
+*/
 
+GROVestingV2Processor.bind({
+	address: CONTRACT.GROVESTING_V2,
+	network: EthChainId.ETHEREUM,
+	//startBlock: 17161912,
+})
+	// .onEventLogVest(LogVestEventlHandler)
+	// .onEventLogExit(LogExitEventlHandler)
+	// .onEventLogExtend(LogExtendEventlHandler)
+	.onTimeInterval(groVestingBlockHandler, 60);
 
-
-
-// ERC20Processor.bind({ address: CONTRACT.GVT, network: EthChainId.ETHEREUM, startBlock: /*12522446*/ 16726265 })
-//     .onEventTransfer((event, ctx) => {
-//         if (event.args.from == ZERO_ADDR) {
-//             gvtAcc.add(ctx, event.args.value.scaleDown(18).decimalPlaces(DECIMALS));
-//         }
-//         if (event.args.to == ZERO_ADDR) {
-//             gvtAcc.sub(ctx, event.args.value.scaleDown(18).decimalPlaces(DECIMALS));
-//         }
-//     }
-//     );
-
-// ERC20Processor.bind({ address: CONTRACT.PWRD, network: EthChainId.ETHEREUM, startBlock: /*12522247*/ 16726265 })
-//     .onEventTransfer((event, ctx) => {
-//         if (event.args.from == ZERO_ADDR) {
-//             pwrdAcc.add(ctx, event.args.value.scaleDown(18).decimalPlaces(DECIMALS));
-//         }
-//         if (event.args.to == ZERO_ADDR) {
-//             pwrdAcc.sub(ctx, event.args.value.scaleDown(18).decimalPlaces(DECIMALS));
-//         }
-//     }
-//     );
+GROHodlerV2Processor.bind({
+	address: CONTRACT.GROHODLER_V2,
+	network: EthChainId.ETHEREUM,
+	//startBlock: 17161912,
+})
+	// .onEventLogBonusAdded(LogBonusAddedEventHandler)
+	// .onEventLogBonusClaimed(LogBonusClaimedEventHandler)
+	// .onBlockInterval(groHodlerBlockHandler, 360)
+	.onTimeInterval(groHodlerBlockHandler, 60)
