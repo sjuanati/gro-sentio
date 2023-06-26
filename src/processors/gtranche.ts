@@ -1,15 +1,11 @@
 import { DECIMALS } from '../constants.js';
-import { Token } from '../types.js';
 import {
-    Gauge,
     Counter,
     LogLevel,
     BigDecimal,
 } from '@sentio/sdk';
 import {
     getGToken,
-    getUsdValue,
-    getTokenByIndex,
 } from '../utils/tokens.js';
 import {
     GTrancheContext,
@@ -58,21 +54,9 @@ export const LogNewTrancheBalanceHandler = async (
     utilRatio.sub(ctx, preUtilRatio);
     utilRatio.add(ctx, util);
     preUtilRatio = util;
-
 }
 
-// export const blockHandler = async (_:any, ctx: GTrancheContext) => {
-//     const pnlDistribution = (await ctx.contract.pnlDistribution());
-//     const gvt = pnlDistribution[0][0].scaleDown(18).decimalPlaces(DECIMALS);
-//     const pwrd = pnlDistribution[0][1].scaleDown(18).decimalPlaces(DECIMALS);
-//     ctx.meter.Gauge("gvt_tvl").record(gvt);
-//     ctx.meter.Gauge("pwrd_tvl").record(pwrd);
-//   }
-
-
-// const gvtAcc = Counter.register('gvtAcc');
-// const pwrdAcc = Counter.register('pwrdAcc');
-
+// @dev: currently not used
 export const LogNewDepositEventlHandler = async (
     event: LogNewDepositEvent,
     ctx: GTrancheContext
@@ -88,15 +72,9 @@ export const LogNewDepositEventlHandler = async (
         amount: amount,
         message: ` minted ${amount} ${gToken} to ${event.args.sender} |`,
     });
-
-    // if (gToken === Token.GVT) {
-    //     gvtAcc.add(ctx, amount);
-    // }
-    // if (gToken === Token.PWRD) {
-    //     pwrdAcc.add(ctx, amount);
-    // }
 }
 
+// @dev: currently not used
 export const LogNewWithdrawalEventHandler = async (
     event: LogNewWithdrawalEvent,
     ctx: GTrancheContext
@@ -112,11 +90,4 @@ export const LogNewWithdrawalEventHandler = async (
         amount: amount,
         message: `burnt ${amount} ${gToken} from ${event.args.sender} | `,
     });
-
-    // if (gToken === Token.GVT) {
-    //     gvtAcc.sub(ctx, amount);
-    // }
-    // if (gToken === Token.PWRD) {
-    //     pwrdAcc.sub(ctx, amount);
-    // }
 }

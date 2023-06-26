@@ -1,9 +1,5 @@
 import { DECIMALS } from '../constants.js';
-import {
-    Gauge,
-    Counter,
-    LogLevel,
-} from '@sentio/sdk';
+import { LogLevel } from '@sentio/sdk';
 import {
     getGToken,
     getUsdValue,
@@ -11,15 +7,12 @@ import {
 } from '../utils/tokens.js';
 import {
     GRouterContext,
-    GRouterProcessor,
     LogDepositEvent,
     LogWithdrawalEvent,
 } from '../types/eth/grouter.js';
-import { Token } from '../types.js';
 
-// const gvtAcc = Counter.register('gvt_acc');
-// const pwrdAcc = Counter.register('pwrd_acc');
 
+// @dev: currently not used
 export const LogDepositEventHandler = async (
     event: LogDepositEvent,
     ctx: GRouterContext
@@ -41,15 +34,9 @@ export const LogDepositEventHandler = async (
         calcAmount: calcAmount,
         message: `deposited ${tokenAmount} ${stableToken} from ${event.args.sender} | minted ${trancheAmount} ${gToken}`,
     });
-
-    // if (gToken === Token.GVT) {
-    //     gvtAcc.add(ctx, trancheAmount);
-    // }
-    // if (gToken === Token.PWRD) {
-    //     pwrdAcc.add(ctx, trancheAmount);
-    // }
 }
 
+// @dev: currently not used
 export const LogWithdrawalEventHandler = async (
     event: LogWithdrawalEvent,
     ctx: GRouterContext
@@ -69,21 +56,4 @@ export const LogWithdrawalEventHandler = async (
         calcAmount: calcAmount,
         message: `withdrew ${calcAmount} ${stableToken} from ${event.args.sender} | burnt ${tokenAmount} ${gToken}`,
     });
-
-    // if (gToken === Token.GVT) {
-    //     gvtAcc.sub(ctx, tokenAmount);
-    // }
-    // if (gToken === Token.PWRD) {
-    //     pwrdAcc.sub(ctx, tokenAmount);
-    // }
 }
-
-
-
-
-// WETH9Processor.bind({ address: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2', startBlock: 13217349 }).onBlockInterval(
-//     async function (_, ctx: WETH9Context) {
-//       const balance = await ctx.contract.balanceOf(TOKEN_BRIDGE_ADDRESS)
-//       ctx.meter.Gauge('balance').record(balance)
-//     }
-//   )
