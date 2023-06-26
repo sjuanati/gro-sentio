@@ -30,3 +30,6 @@ contracts:
   - chain: "1"
     address: "0xEf10eac205817A88C6d504d02481053E85A8F927"
     name: GROHodlerV1
+  - chain: "1"
+    address: "0x7C268Bf50e64258835029c30C91DaA65a9E55b5a"
+    name: GROHodlerV3

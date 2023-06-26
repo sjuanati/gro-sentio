@@ -29,3 +29,5 @@ export const getUsdValue = (calcAmount: bigint, tokenIndex: BigDecimal): BigDeci
         .scaleDown(base)
         .decimalPlaces(DECIMALS);
 }
+
+export const parseNum = (value: BigInt) => value.scaleDown(18).decimalPlaces(2);

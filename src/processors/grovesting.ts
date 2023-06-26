@@ -1,36 +1,18 @@
+import { parseNum } from '../utils/tokens.js';
 import {
     Counter,
     LogLevel,
     BigDecimal,
-    Gauge,
 } from '@sentio/sdk';
 import {
     GROVestingV2Context,
-    LogVestEvent,
-    LogExitEvent,
-    LogExtendEvent,
+    // LogVestEvent,
+    // LogExitEvent,
+    // LogExtendEvent,
 } from '../types/eth/grovestingv2.js';
 
 
-const gGlobalStartDate = Counter.register('globalStartDate');
-const gTotalLockedAmount = Counter.register('totalLockedAmount');
-const gTotalGroove = Counter.register('totalGroove');
-let preGlobalStartDate = BigDecimal(0);
-let preTotalLockedAmount = BigDecimal(0);
-let preTotalGroove = BigDecimal(0);
-
-const parseNum = (value: BigInt) => value.scaleDown(18).decimalPlaces(2);
-
-const getContractData = async (ctx: GROVestingV2Context) => {
-    const [globalStartDate, totalGroove] = await Promise.all([
-        ctx.contract.globalStartTime(),
-        ctx.contract.totalGroove(),
-    ]);
-    return [
-        globalStartDate.asBigDecimal(),
-        parseNum(totalGroove),
-    ];
-}
+// Intervals-based
 
 export const blockHandler = async (_:any, ctx: GROVestingV2Context) => {
     const [totalLockedAmount, totalGroove, globalStartDate] = await Promise.all([
@@ -41,6 +23,26 @@ export const blockHandler = async (_:any, ctx: GROVestingV2Context) => {
     ctx.meter.Gauge("totalLockedAmount2").record(parseNum(totalLockedAmount));
     ctx.meter.Gauge("totalGroove2").record(parseNum(totalGroove));
     ctx.meter.Gauge("globalStartDate2").record(globalStartDate);
+}
+
+// Events-based
+/*
+const gGlobalStartDate = Counter.register('globalStartDate');
+const gTotalLockedAmount = Counter.register('totalLockedAmount');
+const gTotalGroove = Counter.register('totalGroove');
+let preGlobalStartDate = BigDecimal(0);
+let preTotalLockedAmount = BigDecimal(0);
+let preTotalGroove = BigDecimal(0);
+
+const getContractData = async (ctx: GROVestingV2Context) => {
+    const [globalStartDate, totalGroove] = await Promise.all([
+        ctx.contract.globalStartTime(),
+        ctx.contract.totalGroove(),
+    ]);
+    return [
+        globalStartDate.asBigDecimal(),
+        parseNum(totalGroove),
+    ];
 }
 
 export const LogVestEventlHandler = async (
@@ -132,5 +134,4 @@ export const LogExtendEventlHandler = async (
     gTotalGroove.add(ctx, totalLockedAmount);
     preTotalGroove = totalLockedAmount;
 }
-
-
+*/
